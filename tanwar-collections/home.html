@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home · Tanwar Collections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar__brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.6">
+        <path d="M4 4l4-2 4 2 4-2 4 2v16l-4 2-4-2-4 2-4-2Z"/>
+        <path d="M8 2v20M16 2v20"/>
+      </svg>
+      Tanwar
+    </div>
+
+    <a href="home.html" class="nav-link active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      Home
+    </a>
+    <a href="dashboard.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="dashboard.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+      Products
+    </a>
+    <a href="#" class="nav-link" style="opacity:0.55; cursor:default;" onclick="return false;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 4-7"/></svg>
+      Reports <span class="badge-count">soon</span>
+    </a>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__user">
+      <strong data-user-name>—</strong>
+      <span>Store account</span><br>
+      <a href="#" class="logout-link" data-logout>Log out</a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar__title">
+        <div class="kicker">Overview</div>
+        <h1>Good to see you back</h1>
+      </div>
+    </div>
+
+    <section class="welcome-banner">
+      <div>
+        <h1>This week's focus: get every rack logged</h1>
+        <p>You've got the login, dashboard and product tracking running. Next up — finish entering stock for the winter collection.</p>
+      </div>
+      <a href="dashboard.html" class="btn btn-gold btn-sm">Go to dashboard</a>
+    </section>
+
+    <div class="tag-grid" id="home-stats"></div>
+
+    <div class="section-title-row">
+      <h2>Needs reordering</h2>
+      <a href="dashboard.html">View full inventory →</a>
+    </div>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="inv-table">
+          <thead>
+            <tr><th>Product</th><th>Category</th><th>Stock</th><th>Status</th></tr>
+          </thead>
+          <tbody id="home-low-stock-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-title-row">
+      <h2>Quick actions</h2>
+    </div>
+
+    <div class="quick-links">
+      <a href="dashboard.html" class="quick-link">
+        <span class="quick-link__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </span>
+        <div>
+          <h3>Add a product</h3>
+          <p>Log a new item with size, color and stock count.</p>
+        </div>
+      </a>
+      <a href="dashboard.html" class="quick-link">
+        <span class="quick-link__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        </span>
+        <div>
+          <h3>Open full dashboard</h3>
+          <p>Search, filter and manage the entire inventory.</p>
+        </div>
+      </a>
+      <a href="#" class="quick-link" onclick="return false;" style="opacity:0.55;">
+        <span class="quick-link__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 4-7"/></svg>
+        </span>
+        <div>
+          <h3>Sales reports</h3>
+          <p>Coming soon — daily and weekly sales summaries.</p>
+        </div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+  requireAuth();
+</script>
+<script src="js/inventory.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", initSidebarUser);
+</script>
+</body>
+</html>

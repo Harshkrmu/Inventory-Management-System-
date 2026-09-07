@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign up · Tanwar Collections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div class="auth-shell">
+  <aside class="auth-brand">
+    <div class="auth-brand__mark">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.6">
+        <path d="M4 4l4-2 4 2 4-2 4 2v16l-4 2-4-2-4 2-4-2Z"/>
+        <path d="M8 2v20M16 2v20"/>
+      </svg>
+      Tanwar Collections
+    </div>
+
+    <div class="auth-brand__body">
+      <h2>Set up your shop's stockroom, digitally.</h2>
+      <p>Create an account to start logging products, sizes and stock counts — no more guessing what's left on the shelf.</p>
+    </div>
+
+    <div>
+      <hr class="stitch stitch--light" style="margin-bottom:16px;">
+      <div class="auth-brand__foot">
+        <span>Tanwar Collections · Inventory System</span>
+        <span>v0.1 — week 1</span>
+      </div>
+    </div>
+
+    <svg class="auth-brand__tape" width="220" height="220" viewBox="0 0 220 220" fill="none">
+      <circle cx="110" cy="110" r="95" stroke="#39456A" stroke-width="18"/>
+      <circle cx="110" cy="110" r="95" stroke="#B98B3E" stroke-width="1.5" stroke-dasharray="2 8"/>
+    </svg>
+  </aside>
+
+  <main class="auth-form-side">
+    <div class="auth-card">
+      <div class="auth-card__eyebrow">Get started</div>
+      <h1>Create your account</h1>
+      <p class="auth-card__sub">Set up access for yourself or your staff.</p>
+
+      <form id="signup-form" novalidate>
+        <div class="field" id="field-name">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" placeholder="Rakesh Tanwar" autocomplete="name" />
+          <div class="field-error">Enter the store owner or staff name.</div>
+        </div>
+
+        <div class="field" id="field-signup-email">
+          <label for="signup-email">Email address</label>
+          <input type="email" id="signup-email" name="email" placeholder="owner@tanwarcollections.com" autocomplete="email" />
+          <div class="field-error">Enter a valid email address.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" id="field-signup-password">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" placeholder="At least 6 characters" autocomplete="new-password" />
+            <div class="field-error">Use at least 6 characters.</div>
+          </div>
+          <div class="field" id="field-confirm-password">
+            <label for="confirm-password">Confirm</label>
+            <input type="password" id="confirm-password" name="confirm" placeholder="Repeat password" autocomplete="new-password" />
+            <div class="field-error">Passwords don't match.</div>
+          </div>
+        </div>
+
+        <div class="form-msg" id="signup-msg"></div>
+
+        <button type="submit" class="btn btn-primary">Create account</button>
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="index.html">Log in</a></p>
+    </div>
+  </main>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
