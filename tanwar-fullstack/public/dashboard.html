@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard · Tanwar Collections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar__brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.6">
+        <path d="M4 4l4-2 4 2 4-2 4 2v16l-4 2-4-2-4 2-4-2Z"/>
+        <path d="M8 2v20M16 2v20"/>
+      </svg>
+      Tanwar
+    </div>
+
+    <a href="home.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      Home
+    </a>
+    <a href="dashboard.html" class="nav-link active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="dashboard.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+      Products
+    </a>
+    <a href="#" class="nav-link" style="opacity:0.55; cursor:default;" onclick="return false;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 4-7"/></svg>
+      Reports <span class="badge-count">soon</span>
+    </a>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__user">
+      <strong data-user-name>—</strong>
+      <span>Store account</span><br>
+      <a href="#" class="logout-link" data-logout>Log out</a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar__title">
+        <div class="kicker">Inventory</div>
+        <h1>All products</h1>
+      </div>
+      <button class="btn btn-gold btn-sm" id="open-add-modal">+ Add product</button>
+    </div>
+
+    <div class="filters">
+      <div class="searchbox">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#746E62" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="inv-search" placeholder="Search by name or SKU…" />
+      </div>
+      <select id="inv-category-filter">
+        <option value="all">All categories</option>
+        <option value="Men">Men</option>
+        <option value="Women">Women</option>
+        <option value="Kids">Kids</option>
+        <option value="Unisex">Unisex</option>
+      </select>
+      <select id="inv-status-filter">
+        <option value="all">All stock levels</option>
+        <option value="ok">In stock</option>
+        <option value="low">Low stock</option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <div class="panel__head">
+        <h2><span id="inv-count">0</span> products</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Size / Color</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="inv-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add / Edit product modal -->
+<div class="modal-backdrop" id="product-modal-backdrop">
+  <div class="modal">
+    <div class="modal__head">
+      <h2 id="modal-title">Add product</h2>
+      <button class="modal__close" data-close-modal>&times;</button>
+    </div>
+    <form id="product-form">
+      <div class="modal__body">
+        <div class="field">
+          <label for="p-name">Product name</label>
+          <input type="text" id="p-name" name="name" placeholder="e.g. Men's Cotton Kurta" required />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-category">Category</label>
+            <select id="p-category" name="category" required>
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Kids">Kids</option>
+              <option value="Unisex">Unisex</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="p-sku">SKU</label>
+            <input type="text" id="p-sku" name="sku" placeholder="TC-MK-101" required />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-size">Size</label>
+            <input type="text" id="p-size" name="size" placeholder="M / 32 / Free" required />
+          </div>
+          <div class="field">
+            <label for="p-color">Color</label>
+            <input type="text" id="p-color" name="color" placeholder="White" required />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="p-price">Price (₹)</label>
+            <input type="number" id="p-price" name="price" min="0" required />
+          </div>
+          <div class="field">
+            <label for="p-stock">Stock count</label>
+            <input type="number" id="p-stock" name="stock" min="0" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="p-reorder">Reorder level</label>
+          <input type="number" id="p-reorder" name="reorder" min="0" placeholder="Alert when stock falls to this number" required />
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn-ghost btn-sm" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn-gold btn-sm">Save product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+  requireAuth();
+</script>
+<script src="js/inventory.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", initSidebarUser);
+</script>
+</body>
+</html>

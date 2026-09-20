@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Log in · Tanwar Collections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<div class="auth-shell">
+  <!-- Brand panel -->
+  <aside class="auth-brand">
+    <div class="auth-brand__mark">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.6">
+        <path d="M4 4l4-2 4 2 4-2 4 2v16l-4 2-4-2-4 2-4-2Z"/>
+        <path d="M8 2v20M16 2v20"/>
+      </svg>
+      Tanwar Collections
+    </div>
+
+    <div class="auth-brand__body">
+      <h2>Every piece, tracked and in its place.</h2>
+      <p>The inventory manager built for the shop floor — stock levels, sizes and reorder alerts for every rack in the store.</p>
+    </div>
+
+    <div>
+      <hr class="stitch stitch--light" style="margin-bottom:16px;">
+      <div class="auth-brand__foot">
+        <span>Tanwar Collections · Inventory System</span>
+        <span>v0.1 — week 1</span>
+      </div>
+    </div>
+
+    <!-- decorative measuring-tape motif -->
+    <svg class="auth-brand__tape" width="220" height="220" viewBox="0 0 220 220" fill="none">
+      <circle cx="110" cy="110" r="95" stroke="#39456A" stroke-width="18"/>
+      <circle cx="110" cy="110" r="95" stroke="#B98B3E" stroke-width="1.5" stroke-dasharray="2 8"/>
+    </svg>
+  </aside>
+
+  <!-- Form panel -->
+  <main class="auth-form-side">
+    <div class="auth-card">
+      <div class="auth-card__eyebrow">Welcome back</div>
+      <h1>Log in to your store</h1>
+      <p class="auth-card__sub">Enter your details to open the dashboard.</p>
+
+      <form id="login-form" novalidate>
+        <div class="field" id="field-email">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="owner@tanwarcollections.com" autocomplete="username" />
+          <div class="field-error">Enter the email you signed up with.</div>
+        </div>
+
+        <div class="field" id="field-password">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" />
+          <div class="field-error">Enter your password.</div>
+        </div>
+
+        <div class="remember-row">
+          <label><input type="checkbox" name="remember" /> Keep me signed in</label>
+          <a href="#" style="color:var(--gold); text-decoration:none; font-weight:600;">Forgot password?</a>
+        </div>
+
+        <div class="form-msg" id="login-msg"></div>
+
+        <button type="submit" class="btn btn-primary">Log in</button>
+      </form>
+
+      <p class="auth-switch">New to Tanwar Collections? <a href="signup.html">Create an account</a></p>
+
+      <p style="margin-top:22px; font-size:12px; color:var(--muted); text-align:center;">
+        Demo login — owner@tanwarcollections.com / demo1234
+      </p>
+    </div>
+  </main>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
