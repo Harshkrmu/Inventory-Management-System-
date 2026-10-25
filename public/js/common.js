@@ -87,3 +87,12 @@ function initSidebarUser() {
     toggle.addEventListener("click", () => sidebar.classList.toggle("open"));
   }
 }
+
+// Logout: works no matter when the page finishes loading
+document.addEventListener("click", function (e) {
+  var link = e.target.closest("[data-logout]");
+  if (!link) return;
+  e.preventDefault();
+  localStorage.removeItem("tanwar_session");
+  window.location.replace("/index.html");
+});
