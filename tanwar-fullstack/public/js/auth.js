@@ -57,7 +57,7 @@ function initLoginForm() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
-      Session.set(data.token, data.user);
+      Session.set(data.token, data.user, form.remember.checked);
       showFormMsg(msg, "Welcome back — taking you to your dashboard…", "ok");
       setTimeout(() => (window.location.href = "home.html"), 400);
     } catch (err) {

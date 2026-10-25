@@ -11,17 +11,19 @@ const Session = {
   KEY: "tanwar_session",
 
   get() {
-    const raw = localStorage.getItem(this.KEY);
+    const raw = localStorage.getItem(this.KEY) || sessionStorage.getItem(this.KEY);
     return raw ? JSON.parse(raw) : null;
   },
-  set(token, user) {
-    localStorage.setItem(this.KEY, JSON.stringify({ token, user }));
+  set(token, user, remember = true) {
+    this.clear();
+    const store = remember ? localStorage : sessionStorage;
+    store.setItem(this.KEY, JSON.stringify({ token, user }));
   },
   clear() {
     localStorage.removeItem(this.KEY);
+    sessionStorage.removeItem(this.KEY);
   },
 };
-
 /**
  * Wrapper around fetch() that:
  *  - prefixes API_BASE
@@ -88,11 +90,10 @@ function initSidebarUser() {
   }
 }
 
-// Logout: works no matter when the page finishes loading
 document.addEventListener("click", function (e) {
   var link = e.target.closest("[data-logout]");
   if (!link) return;
   e.preventDefault();
-  localStorage.removeItem("tanwar_session");
+  Session.clear();
   window.location.replace("/index.html");
 });
