@@ -1,236 +1,195 @@
-# Tanwar Collections — Inventory Manager (Full Stack)
+# Tanwar Collections — Inventory Manager
 
-A complete inventory management web app for a local clothing store:
-login/signup, a home overview, and a full product dashboard — backed by
-a real Node.js + Express + MySQL API. One server runs everything; there
-is nothing separate to start.
+A complete inventory system for a clothing store: secure login, a live stock
+overview, and a full product manager — built with **Node.js + Express + MySQL**
+and a plain HTML/CSS/JavaScript frontend. One server runs everything; there is
+no separate frontend to start.
 
-**This has been tested end-to-end** — a real MySQL database was created
-from `db/schema.sql`, the server was started, and login, product
-fetching, stats, and adding a product were all verified against the
-live API before this was handed to you.
+## What it does
+
+- **Accounts** — sign up / log in, "Keep me signed in", show/hide password, change password, log out
+- **Home** — live stats (products, units, stock value, low stock, out of stock), a "needs reordering" list, quick actions, CSV export
+- **Inventory** — search (name / SKU / colour), filter (category, stock level), sort, add / edit / delete, one-click **+ / −** stock buttons, CSV export of the current view
+- **Safe by default** — hashed passwords (bcrypt), signed login tokens (JWT), brute-force protection, security headers, validated input, HTML-escaped output
+- **Works on phones** — slide-out menu, scrollable tables
 
 ---
 
-## What you need installed
+## 1. Run it on your computer (Windows / VS Code)
 
-- **Node.js** v18 or later — [nodejs.org](https://nodejs.org)
-- **MySQL** (or MariaDB, which is fully compatible) running locally —
-  [dev.mysql.com/downloads](https://dev.mysql.com/downloads/) or
-  `sudo apt install mariadb-server` on Linux
+You need **Node.js 18+** ([nodejs.org](https://nodejs.org)) and **MySQL** running locally
+(MySQL Installer from [dev.mysql.com/downloads](https://dev.mysql.com/downloads/installer/); remember the root password you set).
 
-## Run it — step by step
+Open the project folder in VS Code → **Terminal → New Terminal**, then:
 
-**1. Install dependencies**
-
-```bash
-cd tanwar-fullstack
+```powershell
 npm install
+Copy-Item .env.example .env
 ```
 
-**2. Set up your database connection**
+Open the new **`.env`** file and set:
 
-```bash
-cp .env.example .env
-```
+| Key | What to put |
+|---|---|
+| `DB_PASSWORD` | your MySQL root password |
+| `JWT_SECRET` | optional — leave empty and a secure key is derived automatically |
 
-Open `.env` in any text editor and set `DB_PASSWORD` to your actual
-MySQL root password (and `DB_USER`/`DB_HOST` too, if different).
-Also change `JWT_SECRET` to any random string of your choosing.
+Then create the database and start the app:
 
-**3. Create the database and tables**
-
-Make sure your MySQL/MariaDB server is running, then:
-
-```bash
+```powershell
 npm run db:init
-```
-
-This creates the `tanwar_collections` database, the `users` and
-`products` tables, a demo login, and 6 demo products. You'll see:
-
-```
-Connected. Running schema.sql ...
-Done — database and tables are ready.
-```
-
-**4. Start the app**
-
-```bash
 npm start
 ```
 
-You'll see:
+Open **http://localhost:4000** and log in with the demo account (it is created
+automatically and intentionally not shown on the login page), or create your own account.
 
-```
-Tanwar Collections API running on http://localhost:4000
-```
-
-**5. Open it in your browser**
-
-Go to **http://localhost:4000** — that's it. The login page, signup,
-home, and dashboard are all served from this one address.
-
-**Demo login:** `owner@tanwarcollections.com` / `demo1234`
-(or create your own account on the signup page)
+> To stop the server press `Ctrl+C`. Next time you only need `npm start`.
 
 ---
 
-## Using `npm run dev` instead
+## 2. Put it online for free (Render + Clever Cloud)
 
-`npm run dev` uses `nodemon`, which restarts the server automatically
-whenever you edit a backend file. Handy while making changes.
+**You need:** a GitHub account, a free [Clever Cloud](https://clever-cloud.com) account (MySQL) and a free [Render](https://render.com) account (hosting). No credit card.
+
+### A. Push the project to GitHub
+`package.json` must be at the **top level** of the repository.
+```powershell
+git init
+git add .
+git commit -m "Tanwar Collections"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
+git push -u origin main
+```
+(`.env` is git-ignored, so your passwords are never uploaded.)
+
+### B. Create the free MySQL database
+Clever Cloud → **Create → Add-on → MySQL → Dev (free)**. Open it and note the five values:
+**Host, Port, User, Password, Database name**.
+
+### C. Create the tables (no MySQL tools needed)
+Put those five values into your local `.env` (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`), then run:
+```powershell
+npm run db:init:managed
+```
+This creates the tables plus the demo account and sample products on the Clever Cloud database.
+Check what is stored any time with `npm run db:view`.
+
+### D. Deploy on Render
+Render → **New → Web Service** → pick your repo, then:
+
+| Setting | Value |
+|---|---|
+| Runtime | Node |
+| Root Directory | *(leave empty — or the sub-folder that contains `package.json`)* |
+| Build Command | `npm install` |
+| Start Command | `npm start` |
+| Instance Type | Free |
+
+Add these **Environment Variables**:
+
+| Key | Value |
+|---|---|
+| `NODE_ENV` | `production` |
+| `DB_HOST` `DB_PORT` `DB_USER` `DB_PASSWORD` `DB_NAME` | the five values from step B |
+| `DB_POOL_LIMIT` | `4` (free MySQL plans allow very few connections) |
+| `JWT_SECRET` | optional — a long random string (≥ 32 chars). If empty, a secure key is derived from your DB credentials |
+| `SEED_DEMO` | optional — `false` removes the automatic demo login |
+| `JWT_EXPIRES_IN` | `7d` |
+| `SIGNUP_CODE` | an invite code of your choice (recommended — see below) |
+
+Do **not** set `PORT` — Render sets it. When the deploy finishes, Render shows your public URL.
+
+> The free Render plan sleeps after ~15 minutes without visitors; the next visit takes 30–50 seconds to wake up. That is normal.
+
+### E. Before you share the link
+1. **Set `SIGNUP_CODE`.** Without it, anyone who finds the URL can create an account and edit your stock. With it, people need the code to sign up.
+2. **Change the demo password** (log in → *Change password* in the sidebar), or sign up your own account.
+3. Never commit `.env`. If a password was ever shared or committed, change it in Clever Cloud and Render.
+
+> Tables and the demo account are created automatically the first time the server starts — there is nothing to run by hand. A weak or missing `JWT_SECRET` is replaced by a key derived from your database credentials.
 
 ---
 
-## What's actually happening
+## 3. Docker (optional)
 
-Unlike the earlier prototype (which stored everything in the browser's
-`localStorage`), this version is a real client-server app:
+Create a `.env` next to `docker-compose.yml` with `DB_PASSWORD=...` (optional: `JWT_SECRET=...`, `SIGNUP_CODE=...`), then:
+```bash
+docker compose up --build
+```
+Open http://localhost:4000. The database is created automatically.
 
-- **`public/`** — the frontend: plain HTML/CSS/JS. This is served
-  directly by the Express server, so opening `http://localhost:4000`
-  is the same as opening `public/index.html`, except now its JavaScript
-  talks to a real API instead of the browser's local storage.
-- **`server.js` + `routes/` + `controllers/`** — the backend API.
-  Handles login/signup (with hashed passwords and JWT tokens) and full
-  product CRUD (create/read/update/delete), all reading and writing to
-  MySQL.
-- **`db/schema.sql`** — defines the two database tables (`users`,
-  `products`) and seeds them with a demo login and demo stock.
+---
 
-Because everything is one server, there's no CORS configuration to
-fight with and no second terminal window to keep open — `npm start`
-is the whole app.
+## Environment variables
 
-## API reference
+| Variable | Required | Default | Purpose |
+|---|---|---|---|
+| `JWT_SECRET` | no | derived | Signs login tokens. Use ≥ 32 random chars, or leave empty |
+| `SEED_DEMO` | no | `true` | Auto-create the demo login (`false` to disable) |
+| `DB_HOST` `DB_PORT` `DB_USER` `DB_PASSWORD` `DB_NAME` | yes | localhost / 3306 / root / – / tanwar_collections | MySQL connection |
+| `NODE_ENV` | no | `development` | Set `production` when deployed |
+| `PORT` | no | `4000` | Set automatically by most hosts |
+| `DB_POOL_LIMIT` | no | `4` | Max DB connections (keep low on free MySQL) |
+| `DB_SSL` | no | off | `true` if your DB host requires SSL |
+| `JWT_EXPIRES_IN` | no | `7d` | Login lifetime |
+| `SIGNUP_CODE` | no | empty | If set, sign-up requires this invite code |
+| `CORS_ORIGIN` | no | `*` | Only change if the frontend is hosted elsewhere |
 
-| Method | Endpoint                | Auth required | Purpose                          |
-|--------|--------------------------|:--:|-----------------------------------|
-| POST   | `/api/auth/signup`      |    | Create an account                 |
-| POST   | `/api/auth/login`       |    | Log in, returns a token           |
-| GET    | `/api/products`         | ✅ | List products (`?search=&category=&status=`) |
-| GET    | `/api/products/stats`   | ✅ | Summary numbers for the Home page |
-| POST   | `/api/products`         | ✅ | Add a product                     |
-| PUT    | `/api/products/:id`     | ✅ | Edit a product                    |
-| DELETE | `/api/products/:id`     | ✅ | Delete a product                  |
+## npm scripts
+
+| Command | Does |
+|---|---|
+| `npm start` | start the server |
+| `npm run dev` | start with auto-restart on file changes |
+| `npm run db:init` | create the database + tables + demo data (local MySQL) |
+| `npm run db:init:managed` | create tables on a hosted database that already exists (Clever Cloud) |
+| `npm run db:view` | print the users and products currently in the database |
+| `npm run user:add -- <email> <password> "<name>"` | create a login, or reset its password |
+
+## API
+
+All `/api/products` routes need `Authorization: Bearer <token>` (returned by login/signup).
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/health` | server + database status |
+| GET | `/api/auth/config` | is an invite code required to sign up? |
+| POST | `/api/auth/signup` | create account (`name`, `email`, `password`, `code?`) |
+| POST | `/api/auth/login` | log in (`email`, `password`) |
+| GET | `/api/auth/me` | current account |
+| PUT | `/api/auth/password` | change password (`currentPassword`, `newPassword`) |
+| GET | `/api/products` | list — `?search=&category=&status=all\|ok\|low\|out&sort=newest\|name\|price_asc\|price_desc\|stock_asc\|stock_desc` |
+| GET | `/api/products/stats` | numbers for the Home page |
+| POST | `/api/products` | add a product |
+| PUT | `/api/products/:id` | edit a product |
+| PATCH | `/api/products/:id/stock` | adjust stock by `delta` (never below 0) |
+| DELETE | `/api/products/:id` | delete a product |
 
 ## Project structure
 
 ```
-tanwar-fullstack/
-├── server.js                  # Express app — serves the API AND the frontend
-├── package.json
-├── .env.example                # copy this to .env and fill in your MySQL password
-├── Dockerfile                  # builds a production container image of the app
-├── docker-compose.yml          # runs app + MySQL together with one command
-├── .dockerignore
-├── config/db.js                # MySQL connection pool
-├── db/
-│   ├── schema.sql              # tables + demo login + demo products
-│   └── init.js                 # runs schema.sql for you (npm run db:init)
-├── middleware/auth.js          # checks the login token on protected routes
-├── controllers/
-│   ├── authController.js       # signup / login logic
-│   └── productController.js    # product CRUD + stats logic
-├── routes/
-│   ├── auth.js
-│   └── products.js
-└── public/                     # the frontend — served automatically
-    ├── index.html               # login
-    ├── signup.html
-    ├── home.html
-    ├── dashboard.html
-    ├── css/styles.css
-    └── js/
-        ├── common.js            # session handling + API helper (fetch wrapper)
-        ├── auth.js               # login/signup form logic
-        └── inventory.js          # dashboard table + home stats, all via the API
+server.js                 Express app: security, API, serves /public
+config/db.js              MySQL connection pool
+middleware/auth.js        checks the login token
+controllers/              auth + product logic (validation lives here)
+routes/                   URL → controller wiring
+db/schema.sql             tables + demo data (local)       db/init.js
+db/schema-managed.sql     same, for hosted databases       db/init-managed.js
+db/view-data.js           print what is in the database
+public/                   the website (HTML, css/, js/)
+Dockerfile, docker-compose.yml
 ```
 
 ## Troubleshooting
 
-**"ECONNREFUSED" or "Access denied" when running `npm run db:init`**
-Your MySQL server isn't running, or the credentials in `.env` don't
-match. Confirm MySQL is running (`mysqladmin ping`) and that
-`DB_USER`/`DB_PASSWORD` in `.env` are correct.
-
-**Port 4000 already in use**
-Change `PORT=4000` in `.env` to something else, e.g. `PORT=5000`, and
-open `http://localhost:5000` instead.
-
-**Signed up but can't log back in**
-Passwords are case-sensitive; email is not. Double-check both.
-
----
-
-## Deploying so other people can use it (not just your laptop)
-
-Right now the app only runs on `localhost` — nobody outside your
-computer can reach it. Deploying means putting it on a server with a
-public address. There are two realistic paths; pick whichever fits.
-
-### Option A — Docker Compose on any VPS (most control, recommended if you have to demo "real deployment")
-
-This bundles the app *and* MySQL together with one command — good for
-a cheap VPS (DigitalOcean, AWS Lightsail, a college server, etc.)
-
-1. Install Docker + Docker Compose on the server (see
-   [docs.docker.com/engine/install](https://docs.docker.com/engine/install/)).
-2. Copy this whole project folder onto the server (`scp`, `git clone`, etc.).
-3. Create a `.env` file in the project root with just these two lines
-   (Compose reads them to configure both containers):
-   ```
-   DB_PASSWORD=pick_a_strong_password
-   JWT_SECRET=generate_a_long_random_string
-   ```
-4. Run:
-   ```bash
-   docker compose up --build -d
-   ```
-   This builds the app image, starts MySQL, automatically runs
-   `db/schema.sql` on first boot, and starts the server.
-5. Visit `http://your-server-ip:4000`. To use a real domain and HTTPS,
-   put [Caddy](https://caddyserver.com/) or [nginx](https://nginx.org/)
-   in front as a reverse proxy — Caddy in particular gets you free
-   auto-renewing HTTPS with about 3 lines of config.
-
-To stop it: `docker compose down` (add `-v` to also wipe the database).
-
-### Option B — Railway (easiest, no server to manage)
-
-[Railway](https://railway.app) builds your app from this folder and
-gives you a public HTTPS URL, with a MySQL database provisioned
-alongside it. No Docker knowledge needed.
-
-1. Push this project to a GitHub repository.
-2. On Railway: **New Project → Deploy from GitHub repo** → pick your repo.
-3. **New → Database → Add MySQL** in the same project. Railway creates
-   it and exposes connection details as environment variables.
-4. Open your app service → **Variables** tab, and set:
-   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` — copy
-     these from the MySQL service's own Variables tab (Railway shows
-     them there, e.g. `MYSQLHOST`, `MYSQLPASSWORD`, etc. — map each
-     one across).
-   - `JWT_SECRET` — any long random string.
-   - `NODE_ENV=production`
-   - `CORS_ORIGIN=*`
-5. Once deployed, open your app's **Settings → Networking** and
-   generate a public domain.
-6. Run the schema once against the new database — easiest way is
-   Railway's built-in MySQL query console (in the MySQL service, open
-   the "Data" tab) — paste in the contents of `db/schema.sql` and run it.
-7. Visit the generated URL. Done — that URL works for anyone, anywhere.
-
-### A note on security before you share the URL
-
-- Generate a real `JWT_SECRET` instead of leaving the example value:
-  ```bash
-  node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
-  ```
-- Use a real, unique `DB_PASSWORD` — never the example one.
-- Never commit your real `.env` file (it's already in `.gitignore`).
-- The app already includes production-safety middleware: `helmet`
-  (security headers), rate limiting on login/signup (blocks brute-force
-  password guessing), gzip compression, and hidden internal error
-  details once `NODE_ENV=production` is set.
+| Problem | Fix |
+|---|---|
+| `ECONNREFUSED` / `Access denied` on `db:init` | MySQL isn't running, or `DB_*` in `.env` is wrong |
+| `EADDRINUSE` | Port 4000 is busy — set `PORT=5000` in `.env` |
+| Render: `Could not read package.json` | Set **Root Directory** to the folder that contains `package.json` |
+| Page looks old after an update | Hard refresh with `Ctrl+Shift+R` |
+| `Too many connections` | Lower `DB_POOL_LIMIT` (e.g. `3`) |
+| Demo login (or any login) doesn't work | Run `npm run user:add -- owner@tanwarcollections.com demo1234 "Rakesh Tanwar"` — it creates the login or resets its password on the database your `.env` points to. Check what exists with `npm run db:view` |
+| "Too many attempts" at login | Wait ~15 minutes (only repeated wrong passwords trigger it) |
