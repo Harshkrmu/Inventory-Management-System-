@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#1B2438" />
+<title>Home · Tanwar Collections</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B2438'/%3E%3Cpath d='M8 9l4-2 4 2 4-2 4 2v14l-4 2-4-2-4 2-4-2z' fill='none' stroke='%23B98B3E' stroke-width='1.8'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-protected data-page="home">
+
+<div class="app-shell">
+  <nav class="sidebar" aria-label="Main">
+    <div class="sidebar__brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B98B3E" stroke-width="1.6" aria-hidden="true">
+        <path d="M4 4l4-2 4 2 4-2 4 2v16l-4 2-4-2-4 2-4-2Z"/>
+        <path d="M8 2v20M16 2v20"/>
+      </svg>
+      Tanwar
+    </div>
+
+    <a href="home.html" class="nav-link active" aria-current="page">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      Home
+    </a>
+    <a href="dashboard.html" class="nav-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      Inventory
+    </a>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__user">
+      <strong data-user-name>—</strong>
+      <span class="email" data-user-email></span>
+      <button type="button" class="user-link" data-open-password>Change password</button>
+      <a href="index.html" class="logout-link" data-logout>Log out</a>
+    </div>
+  </nav>
+  <div class="sidebar-overlay" data-menu-close></div>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar__lead">
+        <button type="button" class="menu-btn" data-menu-toggle aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <div class="topbar__title">
+          <div class="kicker">Overview</div>
+          <h1 id="home-greeting">Welcome back</h1>
+        </div>
+      </div>
+    </div>
+
+    <section class="welcome-banner">
+      <div>
+        <h1 id="banner-title">Loading your store…</h1>
+        <p id="banner-text">Fetching the latest stock numbers.</p>
+      </div>
+      <a href="dashboard.html" id="banner-cta" class="btn btn-gold btn-sm">Open inventory</a>
+    </section>
+
+    <div class="tag-grid" id="home-stats"></div>
+
+    <div class="section-title-row">
+      <h2>Needs reordering</h2>
+      <a href="dashboard.html?status=low">View all low stock →</a>
+    </div>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="inv-table">
+          <thead>
+            <tr><th>Product</th><th>Category</th><th>Stock</th><th>Status</th></tr>
+          </thead>
+          <tbody id="home-low-stock-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-title-row">
+      <h2>Quick actions</h2>
+    </div>
+
+    <div class="quick-links">
+      <a href="dashboard.html#add" class="quick-link">
+        <span class="quick-link__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </span>
+        <div>
+          <h3>Add a product</h3>
+          <p>Log a new item with size, color and stock count.</p>
+        </div>
+      </a>
+      <a href="dashboard.html" class="quick-link">
+        <span class="quick-link__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></span>
+        <div>
+          <h3>Open inventory</h3>
+          <p>Search, filter and manage every product.</p>
+        </div>
+      </a>
+      <button type="button" class="quick-link" id="home-export">
+        <span class="quick-link__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        </span>
+        <div>
+          <h3>Export to CSV</h3>
+          <p>Download the full inventory as a spreadsheet.</p>
+        </div>
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- Change password modal -->
+<div class="modal-backdrop" id="pw-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pw-modal-title">
+  <div class="modal modal--sm">
+    <div class="modal__head">
+      <h2 id="pw-modal-title">Change password</h2>
+      <button type="button" class="modal__close" data-close-pw aria-label="Close">&times;</button>
+    </div>
+    <form id="pw-form" novalidate>
+      <div class="modal__body">
+        <div class="field" style="margin-top:0;">
+          <label for="pw-current">Current password</label>
+          <input type="password" id="pw-current" name="current" autocomplete="current-password" />
+        </div>
+        <div class="field">
+          <label for="pw-new">New password</label>
+          <input type="password" id="pw-new" name="next" autocomplete="new-password" placeholder="6+ characters" />
+        </div>
+        <div class="field">
+          <label for="pw-confirm">Confirm new password</label>
+          <input type="password" id="pw-confirm" name="confirm" autocomplete="new-password" />
+        </div>
+        <div class="form-msg form-msg--error" id="pw-msg" role="alert"></div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn-ghost btn-sm" data-close-pw>Cancel</button>
+        <button type="submit" class="btn btn-gold btn-sm">Update password</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/inventory.js"></script>
+</body>
+</html>

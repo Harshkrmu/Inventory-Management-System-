@@ -1,0 +1,52 @@
+# Runs the whole app with one command — no local MySQL install needed.
+#
+#   1. Create a file named .env next to this one containing:
+#        DB_PASSWORD=choose_a_strong_password
+#        JWT_SECRET=<optional: a long random string>
+#        SIGNUP_CODE=<optional invite code for new accounts>
+#      (generate a secret with:
+#        node -e "console.log(require('crypto').randomBytes(48).toString('hex'))")
+#   2. docker compose up --build
+#   3. Open http://localhost:4000
+#
+# The database is created automatically on first run from db/schema.sql.
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in a .env file}
+      MYSQL_DATABASE: tanwar_collections
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${PORT:-4000}:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in a .env file}
+      DB_NAME: tanwar_collections
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_EXPIRES_IN: 7d
+      SIGNUP_CODE: ${SIGNUP_CODE:-}
+      CORS_ORIGIN: "*"
+
+volumes:
+  db_data:
